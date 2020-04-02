@@ -1,0 +1,22 @@
+.container {
+  text-align: center;
+}
+
+.postmeme {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.inputbox {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+@media only screen and (max-width: 768px) {
+  .inputbox {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+}
+
+/* authors: Daniel Yenegeta and Mati Yiheyis */
