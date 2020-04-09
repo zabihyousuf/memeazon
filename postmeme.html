@@ -10,6 +10,28 @@
   <link rel="stylesheet" href="postmeme.css" />
 </head>
 <body style="background-color:#CFE7FF">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#" style="font-family: 'Comic Sans MS';">Welcome to Memeazon</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#">View your memes</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">View your timeline</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="postmeme.html">Post a meme</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Sign Out</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
   <div class="container">
     <h1 style="padding-bottom: 10px">Post a meme</h1>
     <div class="memeform">
@@ -32,11 +54,6 @@
         <input type="submit" id="memeposter" value="Post meme!" onmouseover="hover()" onmouseout="out()">
       </form>
     </div>
-    <p class="homelink">
-      <a href="home.html">
-        Go home
-      </a>
-    </p>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
