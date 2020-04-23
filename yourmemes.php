@@ -1,3 +1,9 @@
+<?php
+include_once('connection.php');
+require('phpstatements.php');
+$rows = get_current_user_images();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

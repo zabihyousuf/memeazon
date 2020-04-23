@@ -41,4 +41,19 @@ function getFriendInfo_by_name($imageID, $counter)
    $statement->execute();
    $statement->closeCursor();
 }
+function get_current_user_images($image, $author)
+{
+   global $db;
+   $query = "select * from imageIdentifier left join Users on author=userId left join image on imageIdentifier.image order by vote.counter DESC;";
+   $statement = $db->prepare($query);
+   $statement->execute();
+
+   // fetchAll() returns an array for all of the rows in the result set
+   $results = $statement->fetchAll();
+
+   // closes the cursor and frees the connection to the server so other SQL statements may be issued
+   $statement->closecursor();
+   
+   return $results;
+}
 ?>
