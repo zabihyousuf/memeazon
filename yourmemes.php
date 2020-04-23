@@ -18,7 +18,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="yourmemes.html">View your memes</a>
+          <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">View your timeline</a>
@@ -49,7 +49,7 @@
             </td>
             <td><?php echo $elements['username']; ?></td>
             <td>
-              <form action ='home.php' method ='post'>
+              <form action ='yourmemes.php' method ='post'>
                 <input type="submit" value="UpVote" name="action" class="btn btn-primary" />
                 <input type="hidden" name="imageID" value="<?php echo $elements['imageID'] ?>" />
                 <input type="hidden" name="counter" value="<?php echo $elements['counter']; ?>" />
