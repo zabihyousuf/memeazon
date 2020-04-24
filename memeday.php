@@ -1,4 +1,11 @@
 <?php
+if (!isset($_SESSION)) {
+  session_start();
+}
+if (!isset($_SESSION['username'])) {
+  $_SESSION['notLoggedInError'] = "You are not logged in";
+  header("Location: login.php");
+}
 include_once('connection.php');
 require('phpstatements.php');
 $rows = getMemeOfTheDay();
@@ -36,7 +43,7 @@ $rows = getMemeOfTheDay();
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Sign Out</a>
+          <a class="nav-link" href="logout.php">Sign Out</a>
         </li>
       </ul>
     </div>

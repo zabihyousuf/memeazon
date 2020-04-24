@@ -1,4 +1,7 @@
 <?php
+if (!isset($_SESSION)) {
+  session_start();
+}
 include_once('connection.php');
 function getMemes()
 {
@@ -40,5 +43,97 @@ function getFriendInfo_by_name($imageID, $counter)
    $statement->bindValue(':counter', $newcounter);
    $statement->execute();
    $statement->closeCursor();
+}
+function usernameTaken($username)
+{
+  global $db;
+  $query = "SELECT * FROM Users WHERE username=:username";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':username', $username);
+  $statement->execute();
+  $result = $statement->fetch();
+  $statement->closeCursor();
+  if ($result) {
+    return 1;
+  } else {
+    return 0;
+  }
+}
+function addUser($firstname, $lastname, $username, $password)
+{
+  global $db;
+
+  $check = "SELECT * FROM Users WHERE username=:username";
+  $statement = $db->prepare($check);
+  $statement->bindValue(':username', $username);
+  $statement->execute();
+  $result = $statement->fetch();
+  $statement->closeCursor();
+  if ($result) {
+    $_SESSION['takenNameError'] = "There is already a user with that name";
+    header("Location: signup.php");
+  }
+  $passwordHash = password_hash($password, PASSWORD_BCRYPT);
+  $query = "INSERT INTO Users (firstname, lastname, username, password) VALUES (:firstname, :lastname, :username, :password)";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':firstname', $firstname);
+  $statement->bindValue(':lastname', $lastname);
+  $statement->bindValue(':username', $username);
+  $statement->bindValue(':password', $passwordHash);
+  $statement->execute();
+  $statement->closeCursor();
+  $_SESSION['username'] = $_POST['username'];
+  $_SESSION['welcome'] = "Welcome " . $_POST['username'] . "!";
+  header("Location: home.php");
+}
+function validateUser($username, $password)
+{
+  global $db;
+  $query = "SELECT * FROM Users WHERE username=:username";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':username', $username);
+  $statement->execute();
+  $result = $statement->fetch();
+  $statement->closeCursor();
+  if (!$result) {
+    $_SESSION['badNameError'] = "There is no user with that name, please enter a valid username";
+    if (isset($_SESSION['notLoggedInError'])) {
+      unset($_SESSION['notLoggedInError']);
+    }
+    header("Location: login.php");
+  } else {
+    if (isset($_SESSION['badNameError'])) {
+      unset($_SESSION['badNameError']);
+    }
+  }
+
+  $query = "SELECT password FROM Users WHERE username=:username";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':username', $username);
+  $statement->execute();
+  $hashFromDB = $statement->fetch();
+  $statement->closeCursor();
+  $passFromDB = $hashFromDB[0];
+  $pwd = htmlspecialchars($password);
+
+  if (password_verify($pwd, $passFromDB)) {
+    if (isset($_SESSION['badNameError'])) {
+      unset($_SESSION['badNameError']);
+    }
+    if (isset($_SESSION['badPassError'])) {
+      unset($_SESSION['badPassError']);
+    }
+    $_SESSION['username'] = $username;
+    $_SESSION['welcome'] = "Welcome " . $username . "!";
+    header("Location: home.php");
+  } else {
+    $_SESSION['badPassError'] = "Username and password do not match our records";
+    if (isset($_SESSION['notLoggedInError'])) {
+      unset($_SESSION['notLoggedInError']);
+    }
+    header("Location: login.php");
+  }
+
+
 }
 ?>

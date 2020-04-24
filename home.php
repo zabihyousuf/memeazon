@@ -1,10 +1,22 @@
 <?php
+if (!isset($_SESSION)) {
+  session_start();
+}
+if (!isset($_SESSION['username'])) {
+  $_SESSION['notLoggedInError'] = "You are not logged in";
+  header("Location: login.php");
+}
+echo ($_SESSION['welcome']);
 include_once('connection.php');
 require('phpstatements.php');
 if (!empty($_POST['action']))
 {
+   var_dump($_POST);
    if ($_POST['action'] == "UpVote"){
      getFriendInfo_by_name($_POST['imageID'], $_POST['counter']);
+   }
+   if ($_POST['action'] == "LogIn") {
+     validateUser($_POST['username'], $_POST['password']);
    }
 }
 $rows = getMemes();
@@ -36,13 +48,13 @@ $rows = getMemes();
           <a class="nav-link" href="#">View your timeline</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="postmeme.html">Post a meme</a>
+          <a class="nav-link" href="postmeme.php">Post a meme</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Sign Out</a>
+          <a class="nav-link" href="logout.php">Sign Out</a>
         </li>
       </ul>
     </div>

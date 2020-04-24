@@ -1,3 +1,12 @@
+<?php
+if (!isset($_SESSION)) {
+  session_start();
+}
+if (!isset($_SESSION['username'])) {
+  $_SESSION['notLoggedInError'] = "You are not logged in";
+  header("Location: login.php");
+}
+?>
 <!doctype html>
 <html lang="en">
 <head>
