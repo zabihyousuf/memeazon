@@ -1,3 +1,9 @@
+<?php
+include_once('connection.php');
+require('phpstatements.php');
+$rows = get_current_user_images();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +24,7 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">View your memes</a>
+          <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">View your timeline</a>
@@ -30,32 +36,35 @@
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="memeday.php">Sign Out</a>
+          <a class="nav-link" href="memeday.php">Signed Out</a>
         </li>
       </ul>
     </div>
   </nav>
   <div class="container">
-    <h1 style="padding-bottom: 10px">Post a meme</h1>
-    <div class="memeform">
-      <form action="uploadtoimgur.php" method="post" enctype="multipart/form-data">
-        <div class="inputbox">
-        Select image:
-        <input type="file"><br>
-        </div>
-        <div class="inputbox">
-        Select tags:
-        <input type="checkbox" id="funny" value="funny">
-        <label for="funny">Funny</label>
-        <input type="checkbox" id="sports" value="sports">
-        <label for="sports">Sports</label>
-        <input type="checkbox" id="school" value="school">
-        <label for="school">School</label>
-        <input type="checkbox" id="random" value="random">
-        <label for="random">Random</label><br>
-        </div>
-        <input type="submit" id="memeposter" value="Post meme!" onmouseover="hover()" onmouseout="out()">
-      </form>
+    <table style="width:100%">
+        <tr>
+          <th>Meme</th>
+          <th>Author</th>
+          <th>Upvote</th>
+        </tr>
+        <?php foreach ( $rows as $elements) : ?>
+          <tr>
+            <td>
+              <img class="card-img-top"  src=" <?php echo $elements['image']; ?> " alt="Card image cap" style="max-width:100px;">
+            </td>
+            <td><?php echo $elements['username']; ?></td>
+            <td>
+              <form action ='yourmemes.php' method ='post'>
+                <input type="submit" value="UpVote" name="action" class="btn btn-primary" />
+                <input type="hidden" name="imageID" value="<?php echo $elements['imageID'] ?>" />
+                <input type="hidden" name="counter" value="<?php echo $elements['counter']; ?>" />
+              </form>
+            </td>
+            <td><?php echo $elements['counter']; ?></td>
+          </tr>
+        <?php endforeach; ?>
+      </table>
     </div>
   </div>
 

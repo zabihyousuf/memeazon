@@ -31,7 +31,7 @@ $rows = getMemeOfTheDay();
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">View your memes</a>
+          <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">View your timeline</a>
@@ -43,7 +43,11 @@ $rows = getMemeOfTheDay();
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
+<<<<<<< HEAD
           <a class="nav-link" href="logout.php">Sign Out</a>
+=======
+          <a class="nav-link" href="memeday.php">Signed Out</a>
+>>>>>>> 30252ae1bb532e479cf90a7eb6f5c8c7df0e79c4
         </li>
       </ul>
     </div>
