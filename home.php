@@ -13,7 +13,7 @@ $rows = getMemes();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta author="Daniel Yenegeta & Mati Yiheyis">
+  <meta author="Andrew Neidringhaus, Steve Phan, Daniel Yenegeta & Zabih Yousuf">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Homepage</title>
@@ -30,7 +30,7 @@ $rows = getMemes();
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">View your memes</a>
+          <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">View your timeline</a>
@@ -42,7 +42,7 @@ $rows = getMemes();
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Sign Out</a>
+          <a class="nav-link" href="memeday.php">Signed Out</a>
         </li>
       </ul>
     </div>
