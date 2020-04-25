@@ -1,4 +1,5 @@
 <?php
+  // authors: Andrew Neidringhaus, Steve Phan, Daniel Yenegeta & Zabih Yousuf
 if (!isset($_SESSION)) {
   session_start();
 }
@@ -43,6 +44,23 @@ function getFriendInfo_by_name($imageID, $counter)
    $statement->bindValue(':counter', $newcounter);
    $statement->execute();
    $statement->closeCursor();
+}
+function get_current_user_images($author)
+{
+   global $db;
+   // $query = "select * from imageIdentifier left join Users on author=userId left join image on imageIdentifier.image order by vote.counter DESC";
+   $query = "SELECT * from imageIdentifier LEFT JOIN vote ON imageIdentifier.imageID=vote.imageID WHERE author=:author ORDER BY vote.counter DESC";
+   $statement = $db->prepare($query);
+   $statement->bindValue(':author', $author);
+   $statement->execute();
+
+   // fetchAll() returns an array for all of the rows in the result set
+   $results = $statement->fetchAll();
+
+   // closes the cursor and frees the connection to the server so other SQL statements may be issued
+   $statement->closecursor();
+
+   return $results;
 }
 function usernameTaken($username)
 {
@@ -133,7 +151,14 @@ function validateUser($username, $password)
     }
     header("Location: login.php");
   }
+}
+function upvote($imageID) {
 
-
+  global $db;
+  $query = "UPDATE vote SET counter = counter + 1 WHERE imageID=:imageID";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':imageID', $imageID);
+  $statement->execute();
+  $statement->closeCursor();
 }
 ?>

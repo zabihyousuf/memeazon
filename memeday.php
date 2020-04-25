@@ -14,7 +14,7 @@ $rows = getMemeOfTheDay();
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta author="Daniel Yenegeta & Mati Yiheyis">
+  <meta author="Andrew Neidringhaus, Steve Phan, Daniel Yenegeta & Zabih Yousuf">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Homepage</title>
@@ -37,17 +37,13 @@ $rows = getMemeOfTheDay();
           <a class="nav-link" href="#">View your timeline</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="postmeme.html">Post a meme</a>
+          <a class="nav-link" href="postmeme.php">Post a meme</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
-<<<<<<< HEAD
           <a class="nav-link" href="logout.php">Sign Out</a>
-=======
-          <a class="nav-link" href="memeday.php">Signed Out</a>
->>>>>>> 30252ae1bb532e479cf90a7eb6f5c8c7df0e79c4
         </li>
       </ul>
     </div>

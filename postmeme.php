@@ -10,7 +10,7 @@ if (!isset($_SESSION['username'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta author="Daniel Yenegeta & Mati Yiheyis">
+  <meta author="Andrew Neidringhaus, Steve Phan, Daniel Yenegeta & Zabih Yousuf">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Post a meme!</title>
@@ -27,13 +27,13 @@ if (!isset($_SESSION['username'])) {
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">View your memes</a>
+          <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">View your timeline</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="postmeme.html">Post a meme</a>
+          <a class="nav-link" href="postmeme.php">Post a meme</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="memeday.php">Meme of the Day</a>

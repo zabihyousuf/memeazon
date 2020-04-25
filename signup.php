@@ -41,7 +41,7 @@ if (!empty($_POST['action'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta author="Daniel Yenegeta & Mati Yiheyis">
+  <meta author="Andrew Neidringhaus, Steve Phan, Daniel Yenegeta & Zabih Yousuf">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Sign up!</title>

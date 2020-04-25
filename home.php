@@ -6,7 +6,6 @@ if (!isset($_SESSION['username'])) {
   $_SESSION['notLoggedInError'] = "You are not logged in";
   header("Location: login.php");
 }
-echo ($_SESSION['welcome']);
 include_once('connection.php');
 require('phpstatements.php');
 if (!empty($_POST['action']))
@@ -59,6 +58,10 @@ $rows = getMemes();
       </ul>
     </div>
   </nav>
+  <?php
+  echo ($_SESSION['welcome']);
+  ?>
+  <br>
   <div class="container">
     <table style="width:100%">
       <tr>

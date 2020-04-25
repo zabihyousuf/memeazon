@@ -1,7 +1,19 @@
 <?php
 include_once('connection.php');
 require('phpstatements.php');
-$rows = get_current_user_images();
+if (!isset($_SESSION)) {
+  session_start();
+}
+if (!isset($_SESSION['username'])) {
+  $_SESSION['notLoggedInError'] = "You are not logged in";
+  header("Location: login.php");
+}
+if (!empty($_POST['action'])) {
+  if ($_POST['action'] == "UpVote") {
+    upvote($_POST["imageID"]);
+  }
+}
+$rows = get_current_user_images($_SESSION['username']);
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +42,7 @@ $rows = get_current_user_images();
           <a class="nav-link" href="#">View your timeline</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="postmeme.html">Post a meme</a>
+          <a class="nav-link" href="postmeme.php">Post a meme</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
@@ -51,17 +63,18 @@ $rows = get_current_user_images();
         <?php foreach ( $rows as $elements) : ?>
           <tr>
             <td>
-              <img class="card-img-top"  src=" <?php echo $elements['image']; ?> " alt="Card image cap" style="max-width:100px;">
+              <img class="card-img-top"  src=" <?php echo $elements["image"]; ?> " alt="Card image cap" style="max-width:100px;">
+              <a href="<?php echo $elements["image"]; ?> "><?php echo $elements["image"]; ?></a>
             </td>
-            <td><?php echo $elements['username']; ?></td>
+            <td><?php echo $elements["author"]; ?></td>
             <td>
-              <form action ='yourmemes.php' method ='post'>
+              <form action ='' method ='post'>
                 <input type="submit" value="UpVote" name="action" class="btn btn-primary" />
-                <input type="hidden" name="imageID" value="<?php echo $elements['imageID'] ?>" />
-                <input type="hidden" name="counter" value="<?php echo $elements['counter']; ?>" />
+                <input type="hidden" name="imageID" value="<?php echo $elements["imageID"] ?>" />
+                <input type="hidden" name="counter" value="<?php echo $elements["counter"]; ?>" />
               </form>
             </td>
-            <td><?php echo $elements['counter']; ?></td>
+            <td><?php echo $elements["counter"]; ?></td>
           </tr>
         <?php endforeach; ?>
       </table>
