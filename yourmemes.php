@@ -14,6 +14,7 @@ if (!empty($_POST['action'])) {
   }
 }
 $rows = get_current_user_images($_SESSION['username']);
+$rows = showAwards();
 ?>
 
 <!DOCTYPE html>

@@ -13,7 +13,8 @@ if (!empty($_POST['action'])) {
     upvote($_POST["imageID"]);
   }
 }
-$rows = get_current_user_images($_SESSION['username']);
+$rows = get_friends_memes($_SESSION['username']);
+$rows = showAwards();
 ?>
 
 <!DOCTYPE html>
