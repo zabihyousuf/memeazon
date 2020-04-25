@@ -1,0 +1,28 @@
+.container {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .memeform {
+    display: grid;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .inputbox {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .homelink {
+    padding-top: 5px;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .inputbox {
+      padding-top: 5px;
+      padding-bottom: 5px;
+    }
+  }
+  /* authors: Andrew Neidringhaus, Steve Phan, Daniel Yenegeta & Zabih Yousuf */
