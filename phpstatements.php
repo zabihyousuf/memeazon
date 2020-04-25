@@ -34,6 +34,21 @@ function getMemeOfTheDay()
 
    return $results;
 }
+function showAwards()
+{
+   global $db;
+   $query = "select * from award left join imageIdentifier on memeId=imageId order by award.type DESC;";
+   $statement = $db->prepare($query);
+   $statement->execute();
+
+   // fetchAll() returns an array for all of the rows in the result set
+   $results = $statement->fetchAll();
+
+   // closes the cursor and frees the connection to the server so other SQL statements may be issued
+   $statement->closecursor();
+
+   return $results;
+}
 function getFriendInfo_by_name($imageID, $counter)
 {
    global $db;
