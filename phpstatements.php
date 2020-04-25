@@ -34,7 +34,7 @@ function getMemeOfTheDay()
 
    return $results;
 }
-function getFriendInfo_by_name($imageID, $counter)
+function upvote($imageID, $counter)
 {
    global $db;
    $newcounter = $counter + 1;
@@ -165,13 +165,19 @@ function validateUser($username, $password)
     header("Location: login.php");
   }
 }
-function upvote($imageID) {
+function searchResults($search)
+{
+   global $db;
+   $query = "select * from imageIdentifier left join Users on author=userID where imageID in (select imageID from Tags where tagName LIKE :search)";
+   $statement = $db->prepare($query);
+   $statement->bindValue(':search', $search);
+   $statement->execute();
 
-  global $db;
-  $query = "UPDATE vote SET counter = counter + 1 WHERE imageID=:imageID";
-  $statement = $db->prepare($query);
-  $statement->bindValue(':imageID', $imageID);
-  $statement->execute();
-  $statement->closeCursor();
+   // fetchAll() returns an array for all of the rows in the result set
+   $results = $statement->fetchAll();
+   // closes the cursor and frees the connection to the server so other SQL statements may be issued
+   $statement->closecursor();
+
+   return $results;
 }
 ?>

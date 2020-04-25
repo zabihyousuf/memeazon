@@ -10,15 +10,14 @@ include_once('connection.php');
 require('phpstatements.php');
 if (!empty($_POST['action']))
 {
-   var_dump($_POST);
-   if ($_POST['action'] == "UpVote"){
-     upvote($_POST['imageID'], $_POST['counter']);
-   }
    if ($_POST['action'] == "LogIn") {
      validateUser($_POST['username'], $_POST['password']);
    }
 }
-$rows = getMemes();
+if (!empty($_GET['action']))
+{
+    $rows = searchResults($_GET['action']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -71,7 +70,6 @@ $rows = getMemes();
       <tr>
         <th>Meme</th>
         <th>Author</th>
-        <th>Upvote</th>
       </tr>
       <?php foreach ( $rows as $elements) : ?>
         <tr>
@@ -79,14 +77,6 @@ $rows = getMemes();
             <img class="card-img-top"  src=" <?php echo $elements['image']; ?> " alt="Card image cap" style="max-width:100px;">
           </td>
           <td><?php echo $elements['username']; ?></td>
-          <td>
-            <form action ='home.php' method ='post'>
-              <input type="submit" value="UpVote" name="action" class="btn btn-primary" />
-              <input type="hidden" name="imageID" value="<?php echo $elements['imageID'] ?>" />
-              <input type="hidden" name="counter" value="<?php echo $elements['counter']; ?>" />
-            </form>
-          </td>
-          <td><?php echo $elements['counter']; ?></td>
         </tr>
       <?php endforeach; ?>
     </table>
