@@ -91,9 +91,22 @@ function addUser($firstname, $lastname, $username, $password)
     $_SESSION['takenNameError'] = "There is already a user with that name";
     header("Location: signup.php");
   }
+
+  $userIDRandInt = rand(4, 20000);
+  $check2 = "SELECT * FROM Users WHERE userID=:userID";
+  $statement2 = $db->prepare($check);
+  $statement2->bindValue(':userID', $userIDRandInt);
+  $statement2->execute();
+  $result2 = $statement2->fetch();
+  $statement2->closeCursor();
+  if ($result2) {
+    $_SESSION['takenNameError'] = "Sorry there was an error on our end. Try again please.";
+    header("Location: signup.php");
+  }
   $passwordHash = password_hash($password, PASSWORD_BCRYPT);
-  $query = "INSERT INTO Users (firstname, lastname, username, password) VALUES (:firstname, :lastname, :username, :password)";
+  $query = "INSERT INTO Users (userID, firstname, lastname, username, password, mySavedMemes) VALUES (:userID,:firstname, :lastname, :username, :password, 'none')";
   $statement = $db->prepare($query);
+  $statement->bindValue(':userID', $userIDRandInt);
   $statement->bindValue(':firstname', $firstname);
   $statement->bindValue(':lastname', $lastname);
   $statement->bindValue(':username', $username);
