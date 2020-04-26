@@ -10,7 +10,6 @@ include_once('connection.php');
 require('phpstatements.php');
 if (!empty($_POST['action']))
 {
-   var_dump($_POST);
    if ($_POST['action'] == "UpVote"){
      upvote($_POST['imageID'], $_POST['counter']);
    }

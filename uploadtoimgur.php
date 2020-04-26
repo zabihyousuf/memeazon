@@ -19,7 +19,6 @@ if (!isset($_SESSION['username'])) {
 </head>
 <body>
 <div class="container">
-<h2 class="text-center">Imgur PHP Image Uploader</h2>
 <hr/>
 <div class="row">
 <form class="col-sm" action="" enctype="multipart/form-data" method="POST">

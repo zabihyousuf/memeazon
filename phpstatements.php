@@ -94,7 +94,7 @@ function addUser($firstname, $lastname, $username, $password)
 
   $userIDRandInt = rand(4, 20000);
   $check2 = "SELECT * FROM Users WHERE userID=:userID";
-  $statement2 = $db->prepare($check);
+  $statement2 = $db->prepare($check2);
   $statement2->bindValue(':userID', $userIDRandInt);
   $statement2->execute();
   $result2 = $statement2->fetch();
@@ -179,5 +179,71 @@ function searchResults($search)
    $statement->closecursor();
 
    return $results;
+}
+function uploadMeme($url,$tag,$username)
+{
+  global $db;
+  //get userID
+  $query = 'select userID from Users where username=:username';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':username', $username);
+  $statement->execute();
+  $userID = $statement->fetchAll();
+  $statement->closecursor();
+  foreach ( $userID as $elements):
+    $userID= $elements['userID'];
+  endforeach;
+
+
+  //upload image
+  $query = "insert into imageIdentifier (author, image) values (:userID, :url)";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':userID', $userID);
+  $statement->bindValue(':url', $url);
+  $statement->execute();
+  $statement->closeCursor();
+
+  //get imageID
+  $query = "select imageID from imageIdentifier where imageID=:url";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':url', "6");
+  $statement->execute();
+  $imageID = $statement->fetchAll();
+  $statement->closeCursor();
+  foreach ( $imageID as $elements):
+    $imageID= $elements['imageID'];
+  endforeach;
+
+
+
+  //insert into vote
+  $query = "insert into vote (imageID, counter, trendMeter) values (:imageID, 0,0)";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':imageID', $imageID);
+  $statement->execute();
+  $statement->closeCursor();
+
+  //insert into Tags
+  $tagIDRandInt = rand(4, 20000);
+  $check2 = "SELECT * FROM Tags WHERE tagID=:tagID";
+  $statement2 = $db->prepare($check2);
+  $statement2->bindValue(':tagID', $tagIDRandInt);
+  $statement2->execute();
+  $result2 = $statement2->fetch();
+  $statement2->closeCursor();
+  if ($result2) {
+    $_SESSION['takenNameError'] = "Sorry there was an error on our end. Try again please.";
+    header("Location: postmeme.php");
+  }
+  $query = "insert into Tags (tagID, imageID, tagName) values (:tagID,:imageID, :tagName)";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':tagID', $tagIDRandInt);
+  $statement->bindValue(':imageID', $imageID);
+  $statement->bindValue(':tagName', $tag);
+  $statement->execute();
+  $imageID = $statement->fetchAll();
+  $statement->closeCursor();
+
+  // header("Location: home.php");
 }
 ?>
