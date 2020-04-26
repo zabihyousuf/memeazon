@@ -30,7 +30,7 @@ if (!isset($_SESSION['username'])) {
           <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">View your timeline</a>
+          <a class="nav-link" href="timeline.php">View your timeline</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="postmeme.php">Post a meme</a>
@@ -39,7 +39,7 @@ if (!isset($_SESSION['username'])) {
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Sign Out</a>
+          <a class="nav-link" href="logout.php">Sign Out</a>
         </li>
       </ul>
     </div>
@@ -50,17 +50,17 @@ if (!isset($_SESSION['username'])) {
       <form action="upload.php" method="post" enctype="multipart/form-data">
         <div class="inputbox">
         Select image:
-        <input type="file"><br>
+        <input type="file" name="meme"><br>
         </div>
         <div class="inputbox">
         Select tags:
-        <input type="checkbox" id="funny" value="funny">
+        <input type="checkbox" id="funny" value="funny" name="inputbox">
         <label for="funny">Funny</label>
-        <input type="checkbox" id="sports" value="sports">
+        <input type="checkbox" id="sports" value="sports" name="inputbox">
         <label for="sports">Sports</label>
-        <input type="checkbox" id="school" value="school">
+        <input type="checkbox" id="school" value="school" name="inputbox">
         <label for="school">School</label>
-        <input type="checkbox" id="random" value="random">
+        <input type="checkbox" id="random" value="random" name="inputbox">
         <label for="random">Random</label><br>
         </div>
         <input type="submit" id="memeposter" value="Post meme!" onmouseover="hover()" onmouseout="out()">
