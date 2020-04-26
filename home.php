@@ -53,6 +53,12 @@ $rows = showAwards();
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link" href="messages.php">Messages</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="follow.php">Follow Users</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link" href="logout.php">Sign Out</a>
         </li>
         <form action="searchResults.php" method="GET" style="margin-left: 30px;">
