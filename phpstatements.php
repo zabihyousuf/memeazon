@@ -19,11 +19,12 @@ function getMemes()
 
    return $results;
 }
-function get_friends_memes()
+function get_friends_memes($current_user)
 {
    global $db;
-   $query = "select * from imageIdentifier left join Users on author=userId left join following on Users.userId=following.userId order by Users.username DESC;";
+   $query = "select * from imageIdentifier where imageIdentifier.author in (select user2 from following where user1=:current_user)";
    $statement = $db->prepare($query);
+   $statement->bindValue(':current_user', $current_user);
    $statement->execute();
 
    // fetchAll() returns an array for all of the rows in the result set

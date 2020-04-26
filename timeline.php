@@ -13,7 +13,7 @@ if (!empty($_POST['action'])) {
     upvote($_POST["imageID"]);
   }
 }
-$rows = get_friends_memes($_SESSION['username']);
+$rows = get_friends_memes($_SESSION['userID']);
 // $rows = showAwards();
 ?>
 
@@ -69,23 +69,18 @@ $rows = get_friends_memes($_SESSION['username']);
         <tr>
           <th>Meme</th>
           <th>Author</th>
-          <th>Upvote</th>
         </tr>
         <?php foreach ( $rows as $elements) : ?>
           <tr>
             <td>
               <img class="card-img-top"  src=" <?php echo $elements["image"]; ?> " alt="Card image cap" style="max-width:100px;">
-              <a href="<?php echo $elements["image"]; ?> "><?php echo $elements["image"]; ?></a>
             </td>
             <td><?php echo $elements["author"]; ?></td>
             <td>
               <form action ='' method ='post'>
-                <input type="submit" value="UpVote" name="action" class="btn btn-primary" />
                 <input type="hidden" name="imageID" value="<?php echo $elements["imageID"] ?>" />
-                <input type="hidden" name="counter" value="<?php echo $elements["counter"]; ?>" />
               </form>
             </td>
-            <td><?php echo $elements["counter"]; ?></td>
           </tr>
         <?php endforeach; ?>
       </table>
