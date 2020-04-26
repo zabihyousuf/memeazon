@@ -9,11 +9,12 @@ if (!isset($_SESSION['username'])) {
   header("Location: login.php");
 }
 if (!empty($_POST['action'])) {
-  if ($_POST['action'] == "UpVote") {
-    upvote($_POST["imageID"]);
+  if ($_POST['action'] == "Delete") {
+    delete($_POST["imageID"]);
+    // echo $_POST["imageID"];
   }
 }
-$rows = get_current_user_images($_SESSION['username']);
+$rows = get_current_user_images($_SESSION['userID']);
 // $rows = showAwards();
 ?>
 
@@ -57,10 +58,6 @@ $rows = get_current_user_images($_SESSION['username']);
         <li class="nav-item">
           <a class="nav-link" href="logout.php">Sign Out</a>
         </li>
-        <form action="searchResults.php" method="GET" style="margin-left: 30px;">
-          <input id="search" type="text" placeholder="Type here" name="action">
-          <input id="submit" type="submit" value="Search">
-        </form>
       </ul>
     </div>
   </nav>
@@ -69,23 +66,18 @@ $rows = get_current_user_images($_SESSION['username']);
         <tr>
           <th>Meme</th>
           <th>Author</th>
-          <th>Upvote</th>
         </tr>
         <?php foreach ( $rows as $elements) : ?>
           <tr>
             <td>
               <img class="card-img-top"  src=" <?php echo $elements["image"]; ?> " alt="Card image cap" style="max-width:100px;">
-              <a href="<?php echo $elements["image"]; ?> "><?php echo $elements["image"]; ?></a>
             </td>
-            <td><?php echo $elements["author"]; ?></td>
             <td>
               <form action ='' method ='post'>
-                <input type="submit" value="UpVote" name="action" class="btn btn-primary" />
+                <input type="submit" value="Delete" name="action" class="btn btn-primary" />
                 <input type="hidden" name="imageID" value="<?php echo $elements["imageID"] ?>" />
-                <input type="hidden" name="counter" value="<?php echo $elements["counter"]; ?>" />
               </form>
             </td>
-            <td><?php echo $elements["counter"]; ?></td>
           </tr>
         <?php endforeach; ?>
       </table>
