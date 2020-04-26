@@ -9,6 +9,7 @@ if (!isset($_SESSION['username'])) {
 include_once('connection.php');
 require('phpstatements.php');
 $rows = getMemeOfTheDay();
+$rows = showAwards();
 ?>
 
 <!DOCTYPE html>

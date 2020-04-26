@@ -1,4 +1,5 @@
 <?php
+require('phpstatements.php');
 if (!isset($_SESSION)) {
   session_start();
 }
@@ -30,7 +31,7 @@ if (!isset($_SESSION['username'])) {
           <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">View your timeline</a>
+          <a class="nav-link" href="timeline.php">View your timeline</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="postmeme.php">Post a meme</a>
@@ -51,26 +52,95 @@ if (!isset($_SESSION['username'])) {
     </div>
   </nav>
   <div class="container">
-    <h1 style="padding-bottom: 10px">Post a meme</h1>
+    <h1 style="padding-bottom: 5px">Post a meme</h1>
     <div class="memeform">
-      <form action="upload.php" method="post" enctype="multipart/form-data">
-        <div class="inputbox">
-        Select image:
-        <input type="file"><br>
-        </div>
-        <div class="inputbox">
-        Select tags:
-        <input type="checkbox" id="funny" value="funny">
-        <label for="funny">Funny</label>
-        <input type="checkbox" id="sports" value="sports">
-        <label for="sports">Sports</label>
-        <input type="checkbox" id="school" value="school">
-        <label for="school">School</label>
-        <input type="checkbox" id="random" value="random">
-        <label for="random">Random</label><br>
-        </div>
-        <input type="submit" id="memeposter" value="Post meme!" onmouseover="hover()" onmouseout="out()">
-      </form>
+      <div class="container">
+      <hr/>
+      <div class="row">
+      <form class="col-sm" action="" enctype="multipart/form-data" method="POST">
+      <div class="uploader" onclick="$('#filePhoto').click()">
+      <div class="innerUploader">
+          <img class="hidden" src="" />
+          <input accept="image/*" type="file" name="img"  id="filePhoto" />
+      </div>
+      </div>
+       <h5>Select a category!</h5>
+       <select name="tag">
+         <option value="">Select...</option>
+         <option value="funny">Funny</option>
+         <option value="Sad">Sad</option>
+         <option value="Happy">Happy</option>
+         <option value="Sports">Sports</option>
+         <option value="Random">Random</option>
+       </select>
+       <input type="submit" name="submit" value="Upload" />
+      <div class="col-sm">
+      <?php
+      if(isset($_POST['submit'])){
+       $img=$_FILES['img'];
+       if($img['name']==''){
+        echo "<h2>Select an Image Please.</h2>";
+       }
+       else {
+        $filename = $img['tmp_name'];
+        $client_id='67fd839d20ce847';		// Replace this with your client_id, if you want images to be uploaded under your imgur account
+        $handle = fopen($filename, 'r');
+        $data = fread($handle, filesize($filename));
+        $pvars = array('image' => base64_encode($data));
+        $timeout = 30;
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_URL, 'https://api.imgur.com/3/image.json');
+        curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Authorization: Client-ID ' . $client_id));
+        curl_setopt($curl, CURLOPT_POST, 1);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $pvars);
+
+        $out = curl_exec($curl);
+        curl_close ($curl);
+        $pms = json_decode($out,true);
+        $url=$pms['data']['link'];
+        if(!isset($_POST['tag']))
+        {
+          $_SESSION['takenNameError'] = "You must select a tag!";
+          header("Location: postmeme.php");
+        }
+        else{
+            uploadMeme($url, $_POST['tag'], $_SESSION['username']);
+        }
+        // if($url!=''){
+        //  echo "<h4 bg-success>Uploaded Without Any Problem</h4>";
+        //  echo "<input type='text' id='image-link' value='".substr($url,8)."'/><button onclick='copyToClipboard()'>Copy link</button><br/>";        }
+        // else{
+        //  echo "<h4 class='bg-danger'>There’s a Problem</h4>";
+        //  echo "<div>".$pms['data']['error']."</div>";
+        // }
+
+       }
+      }
+      ?>
+      </div>
+      </div>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      <script>
+      var imageLoader = document.getElementById('filePhoto');
+      imageLoader.addEventListener('change', handleImage, false);
+
+      function handleImage(e) {
+          var reader = new FileReader();
+          reader.onload = function (event) {
+              $('.innerUploader img').attr('src',event.target.result).removeClass("hidden" );
+          }
+          reader.readAsDataURL(e.target.files[0]);
+      }
+
+      function copyToClipboard() {
+        var copyText = document.getElementById("image-link");
+        copyText.select();
+        document.execCommand("copy");
+        alert("Copied the link: " + copyText.value);
+      }
+      </script>
     </div>
   </div>
 

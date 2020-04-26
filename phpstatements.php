@@ -19,6 +19,21 @@ function getMemes()
 
    return $results;
 }
+function get_friends_memes()
+{
+   global $db;
+   $query = "select * from imageIdentifier left join Users on author=userId left join following on Users.userId=following.userId order by Users.username DESC;";
+   $statement = $db->prepare($query);
+   $statement->execute();
+
+   // fetchAll() returns an array for all of the rows in the result set
+   $results = $statement->fetchAll();
+
+   // closes the cursor and frees the connection to the server so other SQL statements may be issued
+   $statement->closecursor();
+
+   return $results;
+}
 function getMemeOfTheDay()
 {
    global $db;
@@ -34,7 +49,23 @@ function getMemeOfTheDay()
 
    return $results;
 }
-function getFriendInfo_by_name($imageID, $counter)
+
+function showAwards()
+{
+   global $db;
+   $query = "select * from award left join imageIdentifier on memeId=imageId order by award.type DESC;";
+   $statement = $db->prepare($query);
+   $statement->execute();
+
+   // fetchAll() returns an array for all of the rows in the result set
+   $results = $statement->fetchAll();
+
+   // closes the cursor and frees the connection to the server so other SQL statements may be issued
+   $statement->closecursor();
+
+   return $results;
+}
+function upvote($imageID, $counter)
 {
    global $db;
    $newcounter = $counter + 1;
@@ -94,7 +125,7 @@ function addUser($firstname, $lastname, $username, $password)
 
   $userIDRandInt = rand(4, 20000);
   $check2 = "SELECT * FROM Users WHERE userID=:userID";
-  $statement2 = $db->prepare($check);
+  $statement2 = $db->prepare($check2);
   $statement2->bindValue(':userID', $userIDRandInt);
   $statement2->execute();
   $result2 = $statement2->fetch();
@@ -192,14 +223,86 @@ function validateUser($username, $password)
     header("Location: login.php");
   }
 }
-function upvote($imageID) {
+function searchResults($search)
+{
+   global $db;
+   $query = "select * from imageIdentifier left join Users on author=userID where imageID in (select imageID from Tags where tagName LIKE :search)";
+   $statement = $db->prepare($query);
+   $statement->bindValue(':search', $search);
+   $statement->execute();
 
+   // fetchAll() returns an array for all of the rows in the result set
+   $results = $statement->fetchAll();
+   // closes the cursor and frees the connection to the server so other SQL statements may be issued
+   $statement->closecursor();
+
+   return $results;
+}
+function uploadMeme($url,$tag,$username)
+{
   global $db;
-  $query = "UPDATE vote SET counter = counter + 1 WHERE imageID=:imageID";
+  //get userID
+  $query = 'select userID from Users where username=:username';
+  $statement = $db->prepare($query);
+  $statement->bindValue(':username', $username);
+  $statement->execute();
+  $userID = $statement->fetchAll();
+  $statement->closecursor();
+  foreach ( $userID as $elements):
+    $userID= $elements['userID'];
+  endforeach;
+
+
+  //upload image
+  $query = "insert into imageIdentifier (author, image) values (:userID, :url)";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':userID', $userID);
+  $statement->bindValue(':url', $url);
+  $statement->execute();
+  $statement->closeCursor();
+
+  //get imageID
+  $query = "select imageID from imageIdentifier where imageID=:url";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':url', "6");
+  $statement->execute();
+  $imageID = $statement->fetchAll();
+  $statement->closeCursor();
+  foreach ( $imageID as $elements):
+    $imageID= $elements['imageID'];
+  endforeach;
+
+
+
+  //insert into vote
+  $query = "insert into vote (imageID, counter, trendMeter) values (:imageID, 0,0)";
   $statement = $db->prepare($query);
   $statement->bindValue(':imageID', $imageID);
   $statement->execute();
   $statement->closeCursor();
+
+  //insert into Tags
+  $tagIDRandInt = rand(4, 20000);
+  $check2 = "SELECT * FROM Tags WHERE tagID=:tagID";
+  $statement2 = $db->prepare($check2);
+  $statement2->bindValue(':tagID', $tagIDRandInt);
+  $statement2->execute();
+  $result2 = $statement2->fetch();
+  $statement2->closeCursor();
+  if ($result2) {
+    $_SESSION['takenNameError'] = "Sorry there was an error on our end. Try again please.";
+    header("Location: postmeme.php");
+  }
+  $query = "insert into Tags (tagID, imageID, tagName) values (:tagID,:imageID, :tagName)";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':tagID', $tagIDRandInt);
+  $statement->bindValue(':imageID', $imageID);
+  $statement->bindValue(':tagName', $tag);
+  $statement->execute();
+  $imageID = $statement->fetchAll();
+  $statement->closeCursor();
+
+  // header("Location: home.php");
 }
 function getAllMessages($userID) {
 

@@ -1,3 +1,22 @@
+<?php
+include_once('connection.php');
+require('phpstatements.php');
+if (!isset($_SESSION)) {
+  session_start();
+}
+if (!isset($_SESSION['username'])) {
+  $_SESSION['notLoggedInError'] = "You are not logged in";
+  header("Location: login.php");
+}
+if (!empty($_POST['action'])) {
+  if ($_POST['action'] == "UpVote") {
+    upvote($_POST["imageID"]);
+  }
+}
+$rows = get_friends_memes($_SESSION['username']);
+$rows = showAwards();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,27 +37,48 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" href="#">View your memes</a>
+          <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">View your timeline</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="postmeme.html">Post a meme</a>
+          <a class="nav-link" href="postmeme.php">Post a meme</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="memeday.php">Sign Out</a>
+          <a class="nav-link" href="memeday.php">Signed Out</a>
         </li>
       </ul>
     </div>
   </nav>
   <div class="container">
-    <h1 style="padding-bottom: 10px">Post a meme</h1>
-    <div class="memeform">
-      
+    <table style="width:100%">
+        <tr>
+          <th>Meme</th>
+          <th>Author</th>
+          <th>Upvote</th>
+        </tr>
+        <?php foreach ( $rows as $elements) : ?>
+          <tr>
+            <td>
+              <img class="card-img-top"  src=" <?php echo $elements["image"]; ?> " alt="Card image cap" style="max-width:100px;">
+              <a href="<?php echo $elements["image"]; ?> "><?php echo $elements["image"]; ?></a>
+            </td>
+            <td><?php echo $elements["author"]; ?></td>
+            <td>
+              <form action ='' method ='post'>
+                <input type="submit" value="UpVote" name="action" class="btn btn-primary" />
+                <input type="hidden" name="imageID" value="<?php echo $elements["imageID"] ?>" />
+                <input type="hidden" name="counter" value="<?php echo $elements["counter"]; ?>" />
+              </form>
+            </td>
+            <td><?php echo $elements["counter"]; ?></td>
+          </tr>
+        <?php endforeach; ?>
+      </table>
     </div>
   </div>
 
