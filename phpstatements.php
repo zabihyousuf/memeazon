@@ -114,8 +114,31 @@ function addUser($firstname, $lastname, $username, $password)
   $statement->execute();
   $statement->closeCursor();
   $_SESSION['username'] = $_POST['username'];
+  $_SESSION['userID'] = $userIDRandInt;
   $_SESSION['welcome'] = "Welcome " . $_POST['username'] . "!";
   header("Location: home.php");
+}
+function getUserID($username) {
+
+  global $db;
+  $query = "SELECT userID FROM Users WHERE username=:username";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':username', $username);
+  $statement->execute();
+  $result = $statement->fetch();
+  $statement->closeCursor();
+  return $result;
+}
+function getImageID($image) {
+
+  global $db;
+  $query = "SELECT imageID FROM imageIdentifier WHERE image=:image";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':image', $image);
+  $statement->execute();
+  $result = $statement->fetch();
+  $statement->closeCursor();
+  return $result;
 }
 function validateUser($username, $password)
 {
@@ -154,7 +177,11 @@ function validateUser($username, $password)
     if (isset($_SESSION['badPassError'])) {
       unset($_SESSION['badPassError']);
     }
+    if (isset($_SESSION['notLoggedInError'])) {
+      unset($_SESSION['notLoggedInError']);
+    }
     $_SESSION['username'] = $username;
+    $_SESSION['userID'] = getUserID($username)[0];
     $_SESSION['welcome'] = "Welcome " . $username . "!";
     header("Location: home.php");
   } else {
@@ -171,6 +198,81 @@ function upvote($imageID) {
   $query = "UPDATE vote SET counter = counter + 1 WHERE imageID=:imageID";
   $statement = $db->prepare($query);
   $statement->bindValue(':imageID', $imageID);
+  $statement->execute();
+  $statement->closeCursor();
+}
+function getAllMessages($userID) {
+
+  global $db;
+  $query = "SELECT * FROM message NATURAL JOIN imageIdentifier WHERE userID=:userID";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':userID', $userID);
+  $statement->execute();
+  $results = $statement->fetchAll();
+  $statement->closeCursor();
+  return $results;
+}
+function sendMessage($username, $image, $textContent) {
+
+  global $db;
+  $_SESSION['testing'] = 'testing';
+  $userID = getUserID($username)[0];
+  $imageID = getImageID($image)[0];
+  if (!isset($userID) || !isset($imageID)) {
+    $_SESSION['msgError'] = "Please make sure you've entered a valid username and image url";
+    header("Location: messages.php");
+  }
+
+  $msgIDRandInt = rand(4, 20000);
+  $check = "SELECT * FROM message WHERE messageID=:messageID";
+  $statement = $db->prepare($check);
+  $statement->bindValue(':messageID', $msgIDRandInt);
+  $statement->execute();
+  $result = $statement->fetch();
+  $statement->closeCursor();
+  if ($result) {
+    $_SESSION['takenMsgIDError'] = "Sorry there was an error on our end. Try again please.";
+    header("Location: messages.php");
+  }
+
+  $query = "INSERT INTO message (userID, imageID, messageID, textContent) VALUES (:userID, :imageID, :messageID, :textContent)";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':userID', $userID);
+  $statement->bindValue(':imageID', $imageID);
+  $statement->bindValue(':messageID', $msgIDRandInt);
+  $statement->bindValue(':textContent', $textContent);
+  $statement->execute();
+  $statement->closeCursor();
+  if (isset($_SESSION['msgError'])) {
+    unset($_SESSION['msgError']);
+  }
+  if (isset($_SESSION['takenMsgIDError'])) {
+    unset($_SESSION['takenMsgIDError']);
+  }
+}
+function getNotFollowing($userID)
+{
+
+  global $db;
+  $query = "SELECT u1.username, u1.userID FROM Users as u1
+            LEFT JOIN following as f1
+            ON u1.userID = f1.user2 AND f1.user1=:userID
+            WHERE f1.user2 IS NULL AND u1.userID!=:userID";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':userID', $userID);
+  $statement->execute();
+  $result = $statement->fetchAll();
+  $statement->closeCursor();
+  return $result;
+}
+function followUser($user1, $user2)
+{
+
+  global $db;
+  $query = "INSERT INTO following (user1, user2) VALUES (:user1, :user2)";
+  $statement = $db->prepare($query);
+  $statement->bindValue(':user1', $user1);
+  $statement->bindValue(':user2', $user2);
   $statement->execute();
   $statement->closeCursor();
 }

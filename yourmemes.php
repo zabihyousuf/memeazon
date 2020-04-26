@@ -48,7 +48,13 @@ $rows = get_current_user_images($_SESSION['username']);
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="memeday.php">Signed Out</a>
+          <a class="nav-link" href="messages.php">Messages</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="follow.php">Follow Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="logout.php">Sign Out</a>
         </li>
       </ul>
     </div>
