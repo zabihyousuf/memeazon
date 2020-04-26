@@ -68,7 +68,6 @@ if (!isset($_SESSION['username'])) {
          <option value="Random">Random</option>
        </select>
        <input type="submit" name="submit" value="Upload" />
-      </form>
       <div class="col-sm">
       <?php
       if(isset($_POST['submit'])){
