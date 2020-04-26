@@ -44,7 +44,7 @@ $rows = showAwards();
           <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">View your timeline</a>
+          <a class="nav-link" href="timeline.php">View your timeline</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="postmeme.php">Post a meme</a>
