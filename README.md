@@ -3,7 +3,7 @@
 # Setting Up
 
 Begin by clicking the "Login" button at the top left of the website. 
-If successful, you will redirected back to the homepage. Confirm that your computing id and "Logout" button are there in place of the "Login" button. 
+If successful, you will redirected back to the homepage. Confirm that your username and "Logout" button are there in place of the "Login" button. 
 
 # Your Profile
 Click on the "Profile" button at the top right. Your username will be displayed here as well as all the memes you have posted. 
