@@ -80,7 +80,7 @@ function get_current_user_images($author)
 {
    global $db;
    // $query = "select * from imageIdentifier left join Users on author=userId left join image on imageIdentifier.image order by vote.counter DESC";
-   $query = "SELECT * from imageIdentifier LEFT JOIN vote ON imageIdentifier.imageID=vote.imageID WHERE author=:author ORDER BY vote.counter DESC";
+   $query = "select * from imageIdentifier left join Users on author=userId left join vote on imageIdentifier.imageId=vote.imageId where Users.username=:author";
    $statement = $db->prepare($query);
    $statement->bindValue(':author', $author);
    $statement->execute();
@@ -262,17 +262,15 @@ function uploadMeme($url,$tag,$username)
   $statement->closeCursor();
 
   //get imageID
-  $query = "select imageID from imageIdentifier where imageID=:url";
+  $query = "select imageID from imageIdentifier where image=:url";
   $statement = $db->prepare($query);
-  $statement->bindValue(':url', "6");
+  $statement->bindValue(':url', $url);
   $statement->execute();
   $imageID = $statement->fetchAll();
   $statement->closeCursor();
   foreach ( $imageID as $elements):
     $imageID= $elements['imageID'];
   endforeach;
-
-
 
   //insert into vote
   $query = "insert into vote (imageID, counter, trendMeter) values (:imageID, 0,0)";
@@ -302,7 +300,7 @@ function uploadMeme($url,$tag,$username)
   $imageID = $statement->fetchAll();
   $statement->closeCursor();
 
-  // header("Location: home.php");
+  header("Location: home.php");
 }
 function getAllMessages($userID) {
 

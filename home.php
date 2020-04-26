@@ -18,7 +18,7 @@ if (!empty($_POST['action']))
    }
 }
 $rows = getMemes();
-$rows = showAwards();
+// $rows = showAwards();
 ?>
 
 <!DOCTYPE html>

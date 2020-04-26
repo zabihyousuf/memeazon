@@ -14,7 +14,7 @@ if (!empty($_POST['action'])) {
   }
 }
 $rows = get_friends_memes($_SESSION['username']);
-$rows = showAwards();
+// $rows = showAwards();
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +40,7 @@ $rows = showAwards();
           <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">View your timeline</a>
+          <a class="nav-link" href="timeline.php">View your timeline</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="postmeme.php">Post a meme</a>
@@ -49,8 +49,18 @@ $rows = showAwards();
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="memeday.php">Signed Out</a>
+          <a class="nav-link" href="messages.php">Messages</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="follow.php">Follow Users</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="logout.php">Sign Out</a>
+        </li>
+        <form action="searchResults.php" method="GET" style="margin-left: 30px;">
+          <input id="search" type="text" placeholder="Type here" name="action">
+          <input id="submit" type="submit" value="Search">
+        </form>
       </ul>
     </div>
   </nav>

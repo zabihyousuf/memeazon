@@ -8,7 +8,16 @@ if (!isset($_SESSION['username'])) {
 }
 include_once('connection.php');
 require('phpstatements.php');
-$rows = getMemeOfTheDay();
+if (!empty($_POST['action']))
+{
+   if ($_POST['action'] == "LogIn") {
+     validateUser($_POST['username'], $_POST['password']);
+   }
+}
+if (!empty($_GET['action']))
+{
+    $rows = searchResults($_GET['action']);
+}
 ?>
 
 <!DOCTYPE html>
@@ -34,19 +43,13 @@ $rows = getMemeOfTheDay();
           <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="timeline.php">View your timeline</a>
+          <a class="nav-link" href="#">View your timeline</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="postmeme.php">Post a meme</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="memeday.php">Meme of the Day</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="messages.php">Messages</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="follow.php">Follow Users</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="logout.php">Sign Out</a>
@@ -58,9 +61,11 @@ $rows = getMemeOfTheDay();
       </ul>
     </div>
   </nav>
+  <?php
+  echo ($_SESSION['welcome']);
+  ?>
+  <br>
   <div class="container">
-    <h1>Meme of the Day</h4>
-      <br>
     <table style="width:100%">
       <tr>
         <th>Meme</th>
@@ -69,7 +74,7 @@ $rows = getMemeOfTheDay();
       <?php foreach ( $rows as $elements) : ?>
         <tr>
           <td>
-            <img class="card-img-top"  src=" <?php echo $elements['image']; ?> " alt="Card image cap" style="max-width:200px;">
+            <img class="card-img-top"  src=" <?php echo $elements['image']; ?> " alt="Card image cap" style="max-width:100px;">
           </td>
           <td><?php echo $elements['username']; ?></td>
         </tr>

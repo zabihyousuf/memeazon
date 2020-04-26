@@ -48,6 +48,10 @@ if (!isset($_SESSION['username'])) {
         <li class="nav-item">
           <a class="nav-link" href="logout.php">Sign Out</a>
         </li>
+        <form action="searchResults.php" method="GET" style="margin-left: 30px;">
+          <input id="search" type="text" placeholder="Type here" name="action">
+          <input id="submit" type="submit" value="Search">
+        </form>
       </ul>
     </div>
   </nav>
@@ -74,6 +78,7 @@ if (!isset($_SESSION['username'])) {
          <option value="Random">Random</option>
        </select>
        <input type="submit" name="submit" value="Upload" />
+      </form>
       <div class="col-sm">
       <?php
       if(isset($_POST['submit'])){
