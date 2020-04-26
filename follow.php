@@ -1,4 +1,6 @@
 <?php
+include_once('connection.php');
+require('phpstatements.php');
 if (!isset($_SESSION)) {
   session_start();
 }
@@ -6,31 +8,21 @@ if (!isset($_SESSION['username'])) {
   $_SESSION['notLoggedInError'] = "You are not logged in";
   header("Location: login.php");
 }
-include_once('connection.php');
-require('phpstatements.php');
-if (!empty($_POST['action']))
-{
-   if ($_POST['action'] == "UpVote"){
-     upvote($_POST['imageID'], $_POST['counter']);
-   }
-   if ($_POST['action'] == "LogIn") {
-     validateUser($_POST['username'], $_POST['password']);
-   }
+if (!empty($_POST['action']) && $_POST['action'] == "Follow") {
+  followUser($_POST['user1ID'], $_POST['user2ID']);
 }
-$rows = getMemes();
-$rows = showAwards();
+$rows = getNotFollowing($_SESSION['userID']);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta author="Andrew Neidringhaus, Steve Phan, Daniel Yenegeta & Zabih Yousuf">
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Homepage</title>
+  <title>View your messages!</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
   integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
-  <link rel="stylesheet" href="home.css" />
+  <link rel="stylesheet" href="messages.css" />
 </head>
 <body style="background-color:#CFE7FF">
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -61,43 +53,34 @@ $rows = showAwards();
         <li class="nav-item">
           <a class="nav-link" href="logout.php">Sign Out</a>
         </li>
-        <form action="searchResults.php" method="GET" style="margin-left: 30px;">
-          <input id="search" type="text" placeholder="Type here" name="action">
-          <input id="submit" type="submit" value="Search">
-        </form>
       </ul>
     </div>
   </nav>
-  <?php
-  echo ($_SESSION['welcome']);
-  ?>
-  <br>
   <div class="container">
     <table style="width:100%">
-      <tr>
-        <th>Meme</th>
-        <th>Author</th>
-        <th>Upvote</th>
-      </tr>
-      <?php foreach ( $rows as $elements) : ?>
         <tr>
-          <td>
-            <img class="card-img-top"  src=" <?php echo $elements['image']; ?> " alt="Card image cap" style="max-width:100px;">
-          </td>
-          <td><?php echo $elements['username']; ?></td>
-          <td>
-            <form action ='home.php' method ='post'>
-              <input type="submit" value="UpVote" name="action" class="btn btn-primary" />
-              <input type="hidden" name="imageID" value="<?php echo $elements['imageID'] ?>" />
-              <input type="hidden" name="counter" value="<?php echo $elements['counter']; ?>" />
-            </form>
-          </td>
-          <td><?php echo $elements['counter']; ?></td>
+          <th>Username</th>
         </tr>
-      <?php endforeach; ?>
-    </table>
-    <!-- my php code which uses x-path to get results from xml query. -->
+        <?php foreach ( $rows as $elements) : ?>
+          <tr>
+            <td><?php echo $elements["username"]; ?></td>
+            <td>
+              <form method="POST" action="">
+                <input type="submit" value="Follow" name="action" class="btn btn-primary" />
+                <input type="hidden" name="user1ID" value="<?php echo $_SESSION['userID'] ?>" />
+                <input type="hidden" name="user2ID" value="<?php echo $elements["userID"]; ?>" />
+              </form>
+            </td>
+          </tr>
+        <?php endforeach; ?>
+      </table>
+      <br>
+      <?php
+        if (empty($rows)) {
+          echo("You're following everybody!");
+        }
+      ?>
     </div>
-</div>
+  </div>
 </body>
 </html>
