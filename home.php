@@ -10,9 +10,8 @@ include_once('connection.php');
 require('phpstatements.php');
 if (!empty($_POST['action']))
 {
-   var_dump($_POST);
    if ($_POST['action'] == "UpVote"){
-     getFriendInfo_by_name($_POST['imageID'], $_POST['counter']);
+     upvote($_POST['imageID'], $_POST['counter']);
    }
    if ($_POST['action'] == "LogIn") {
      validateUser($_POST['username'], $_POST['password']);
@@ -56,6 +55,10 @@ $rows = showAwards();
         <li class="nav-item">
           <a class="nav-link" href="logout.php">Sign Out</a>
         </li>
+        <form action="searchResults.php" method="GET" style="margin-left: 30px;">
+          <input id="search" type="text" placeholder="Type here" name="action">
+          <input id="submit" type="submit" value="Search">
+        </form>
       </ul>
     </div>
   </nav>
