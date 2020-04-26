@@ -76,6 +76,15 @@ function upvote($imageID, $counter)
    $statement->execute();
    $statement->closeCursor();
 }
+function delete($imageID)
+{
+   global $db;
+   $query = "DELETE FROM imageIdentifier WHERE imageID=:imageID";
+   $statement = $db->prepare($query);
+   $statement->bindValue(':imageID', $imageID);
+   $statement->execute();
+   $statement->closeCursor();
+}
 function get_current_user_images($author)
 {
    global $db;

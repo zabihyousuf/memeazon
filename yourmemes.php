@@ -13,6 +13,11 @@ if (!empty($_POST['action'])) {
     upvote($_POST["imageID"]);
   }
 }
+if (!empty($_POST['action'])) {
+  if ($_POST['action'] == "delete") {
+    delete($_POST["imageID"]);
+  }
+}
 $rows = get_current_user_images($_SESSION['username']);
 $rows = showAwards();
 ?>
@@ -40,7 +45,7 @@ $rows = showAwards();
           <a class="nav-link" href="yourmemes.php">View your memes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">View your timeline</a>
+          <a class="nav-link" href="timeline.php">View your timeline</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="postmeme.php">Post a meme</a>
@@ -77,6 +82,7 @@ $rows = showAwards();
             <td>
               <form action ='' method ='post'>
                 <input type="submit" value="UpVote" name="action" class="btn btn-primary" />
+                <input type="submit" name="delete" value="delete" class="btn-primary" />
                 <input type="hidden" name="imageID" value="<?php echo $elements["imageID"] ?>" />
                 <input type="hidden" name="counter" value="<?php echo $elements["counter"]; ?>" />
               </form>
